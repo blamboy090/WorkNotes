@@ -43,7 +43,7 @@ namespace WorkNotes
                 //run the main program loop
                 while (true) { 
                 // Get user input
-                Console.WriteLine("Enter notes:");
+                Console.WriteLine("Enter notes or command:");
                 string userInput = Console.ReadLine();
 
                     if (userInput.ToLower() == "exit")
@@ -75,6 +75,7 @@ namespace WorkNotes
 
                         // Append user input to file
                         File.AppendAllText(filePath, entry);
+                        Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Text successfully written to the file.");
                         Console.ResetColor();
@@ -128,7 +129,7 @@ namespace WorkNotes
             Console.WriteLine("Welcome to the WorkNotes program!");
             Console.WriteLine("This program allows you to enter notes on what you worked on for the last hour and record them to a file.");
             Console.WriteLine("Instructions:");
-            Console.WriteLine("1. Enter a notes and press Enter to record it to the file.");
+            Console.WriteLine("1. Enter your notes and press Enter to record it to the file.");
             Console.WriteLine("2. To exit the program, type 'exit' and press Enter.");
             Console.WriteLine("3. To read the contents of the file, type 'read' and press Enter.");
             Console.WriteLine();
