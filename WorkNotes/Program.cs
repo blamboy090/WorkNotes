@@ -12,7 +12,7 @@ namespace WorkNotes
         static void Main(string[] args)
         {
             //Specify the file path and name
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "output.txt");
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WorkNotes.txt");
            
 
             // Display instructions
@@ -27,7 +27,7 @@ namespace WorkNotes
 
 
             // Create a timer that triggers every hour
-            var timer = new System.Timers.Timer(60 *  1000); // 1 hour = 60 minutes * 60 seconds * 1000 milliseconds
+            var timer = new System.Timers.Timer(60 * 60* 1000); // 1 hour = 60 minutes * 60 seconds * 1000 milliseconds
 
             // Set up the event handler for the timer
             timer.Elapsed += TimerElapsed;
@@ -40,7 +40,7 @@ namespace WorkNotes
                 //run the main program loop
                 while (true) { 
                 // Get user input
-                Console.WriteLine("Enter a string:");
+                Console.WriteLine("Enter notes:");
                 string userInput = Console.ReadLine();
 
                     if(userInput.ToLower()== "exit")
@@ -102,10 +102,13 @@ namespace WorkNotes
             Console.WriteLine(asciiArt);
             Console.WriteLine();
             Console.WriteLine("Welcome to the WorkNotes program!");
-            Console.WriteLine("This program allows you to enter strings and record them to a file.");
+            Console.WriteLine("This program allows you to enter notes on what you worked on for the last hour and record them to a file.");
             Console.WriteLine("Instructions:");
-            Console.WriteLine("1. Enter a string and press Enter to record it to the file.");
+            Console.WriteLine("1. Enter a notes and press Enter to record it to the file.");
             Console.WriteLine("2. To exit the program, type 'exit' and press Enter.");
+            Console.WriteLine();
+            Console.WriteLine("The file will be located on your desktop as a .txt file.");
+            Console.WriteLine("Use it as reference while filling out your timesheet.");
             Console.WriteLine();
         }
 
