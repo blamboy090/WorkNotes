@@ -27,7 +27,7 @@ namespace WorkNotes
 
 
             // Create a timer that triggers every hour
-            var timer = new System.Timers.Timer(60 * 60* 1000); // 1 hour = 60 minutes * 60 seconds * 1000 milliseconds
+            var timer = new System.Timers.Timer(60 * 60 * 1000); // 1 hour = 60 minutes * 60 seconds * 1000 milliseconds
 
             // Set up the event handler for the timer
             timer.Elapsed += TimerElapsed;
@@ -43,21 +43,35 @@ namespace WorkNotes
                 Console.WriteLine("Enter notes:");
                 string userInput = Console.ReadLine();
 
-                    if(userInput.ToLower()== "exit")
+                    if (userInput.ToLower() == "exit")
                     {
                         break;
                     }
+                    else if (userInput.ToLower() == "read")
+                    {
+                        // Read the contents of the file
+                        string fileContents = File.ReadAllText(filePath);
 
-                //Create a timestamp with the current date and time
-                string timeStamp = DateTime.Now.ToString("G");
+                        //Display the file contents
+                        Console.WriteLine("File Contents:");
+                        Console.WriteLine(fileContents);
+                    }
+                    else
+                    {
 
-                // Format the entry with the timestamp and user input
-                string entry = $"{timeStamp}: {userInput}{Environment.NewLine}";
+                        //Create a timestamp with the current date and time
+                        string timeStamp = DateTime.Now.ToString("G");
 
-                // Append user input to file
-                File.AppendAllText(filePath, entry);
+                        // Format the entry with the timestamp and user input
+                        string entry = $"{timeStamp}: {userInput}{Environment.NewLine}";
 
-                Console.WriteLine("Text successfully written to the file.");
+                        // Append user input to file
+                        File.AppendAllText(filePath, entry);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Text successfully written to the file.");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                    }
                 }
             }
             catch (Exception ex)
@@ -106,6 +120,7 @@ namespace WorkNotes
             Console.WriteLine("Instructions:");
             Console.WriteLine("1. Enter a notes and press Enter to record it to the file.");
             Console.WriteLine("2. To exit the program, type 'exit' and press Enter.");
+            Console.WriteLine("3. To read the contents of the file, type 'read' and press Enter.");
             Console.WriteLine();
             Console.WriteLine("The file will be located on your desktop as a .txt file.");
             Console.WriteLine("Use it as reference while filling out your timesheet.");
