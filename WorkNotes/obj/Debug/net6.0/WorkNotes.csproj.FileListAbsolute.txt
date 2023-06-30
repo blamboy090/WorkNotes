@@ -1,0 +1,15 @@
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\bin\Debug\net6.0\WorkNotes.exe
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\bin\Debug\net6.0\WorkNotes.deps.json
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\bin\Debug\net6.0\WorkNotes.runtimeconfig.json
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\bin\Debug\net6.0\WorkNotes.dll
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\bin\Debug\net6.0\WorkNotes.pdb
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\WorkNotes.csproj.AssemblyReference.cache
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\WorkNotes.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\WorkNotes.AssemblyInfoInputs.cache
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\WorkNotes.AssemblyInfo.cs
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\WorkNotes.csproj.CoreCompileInputs.cache
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\WorkNotes.dll
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\refint\WorkNotes.dll
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\WorkNotes.pdb
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\WorkNotes.genruntimeconfig.cache
+C:\Users\blamboy\Desktop\Code\WorkNotes\WorkNotes\obj\Debug\net6.0\ref\WorkNotes.dll
