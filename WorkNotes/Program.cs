@@ -8,13 +8,15 @@ namespace WorkNotes
 {
     class Program
     {
-        static int noteIdCounter = 1;
+        //Specify the file path and name
+        static string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WorkNotes.txt");
+        static int noteIdCounter;
+       
       
         static void Main(string[] args)
         {
-            //Specify the file path and name
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WorkNotes.txt");
-           
+
+            int noteIdCounter = LoadNoteIdCounter(filePath) + 1;
 
             // Display instructions
             DisplayInstructions();
@@ -133,6 +135,24 @@ namespace WorkNotes
             Console.WriteLine("The file will be located on your desktop as a .txt file.");
             Console.WriteLine("Use it as reference while filling out your timesheet.");
             Console.WriteLine();
+        }
+
+        static int LoadNoteIdCounter(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                string[] lines = File.ReadAllLines(filePath);
+                if(lines.Length > 0)
+                {
+                    string lastLine = lines[lines.Length - 1];
+                    string[] parts = lastLine.Split(':');
+                    if (parts.Length >= 2 && int.TryParse(parts[0].Trim(), out int noteIdCounter))
+                    {
+                        return noteIdCounter;
+                    }
+                }
+            }
+            return 0;
         }
 
     }
