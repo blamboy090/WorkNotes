@@ -3,6 +3,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Timers;
 using System.Media;
+using System.Diagnostics;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace WorkNotes
 {
@@ -17,6 +19,7 @@ namespace WorkNotes
         {
 
             int noteIdCounter = LoadNoteIdCounter(filePath) + 1;
+            string url = "https://youtu.be/BHkyhVre5V4";
 
             // Display instructions
             DisplayInstructions();
@@ -45,8 +48,16 @@ namespace WorkNotes
                 // Get user input
                 Console.WriteLine("Enter notes or command:");
                 string userInput = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(userInput))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Error: Please add a note.");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                        Console.ReadKey();
+                    }
 
-                    if (userInput.ToLower() == "exit")
+                    else if (userInput.ToLower() == "exit")
                     {
                         break;
                     }
@@ -62,6 +73,14 @@ namespace WorkNotes
                         Console.WriteLine("File Contents:");
                         Console.ResetColor();
                         Console.WriteLine(fileContents);
+                    }
+                    else if (userInput.ToLower() == "loafboi")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("FOUND ME!");                        
+                        LaunchUrl(url);
+                        Console.ReadKey();
+                        Console.Clear();
                     }
                     else
                     {
@@ -126,17 +145,49 @@ namespace WorkNotes
 
             Console.WriteLine(asciiArt);
             Console.WriteLine();
-            Console.WriteLine("Welcome to the WorkNotes program!");
-            Console.WriteLine("This program allows you to enter notes on what you worked on for the last hour and record them to a file.");
+            Console.Write("We");
+            HighlightFirstInstance("l", "Welcome");
+            Console.Write("come to the W");
+            HighlightFirstInstance("o", "orkNotes");
+            Console.WriteLine("rkNotes program!");
+            Console.Write("This program ");
+            HighlightFirstInstance("a", "allows");
+            Console.Write("llows you to enter notes on what you worked on for the last hour and record them to a ");
+            HighlightFirstInstance("f", "file");
+            Console.WriteLine(".");
             Console.WriteLine("Instructions:");
             Console.WriteLine("1. Enter your notes and press Enter to record it to the file.");
             Console.WriteLine("2. To exit the program, type 'exit' and press Enter.");
             Console.WriteLine("3. To read the contents of the file, type 'read' and press Enter.");
             Console.WriteLine();
-            Console.WriteLine("The file will be located on your desktop as a .txt file.");
+            Console.Write("The file will ");
+            HighlightFirstInstance("b", "be");
+            Console.Write("e located on your deskt");
+            HighlightFirstInstance("o", "op");
+            Console.Write("p as a .txt f");
+            HighlightFirstInstance("i", "ile");
+            Console.WriteLine(".");
             Console.WriteLine("Use it as reference while filling out your timesheet.");
             Console.WriteLine();
         }
+
+        static void HighlightFirstInstance(string targetLetter, string text)
+        {
+            int index = text.IndexOf(targetLetter);
+            if (index >= 0)
+            {
+                Console.Write(text.Substring(0, index));
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(targetLetter);
+                Console.ResetColor();
+                Console.Write(text.Substring(index + 1));
+            }
+            else
+            {
+                Console.Write(text);
+            }
+        }
+
 
         static int LoadNoteIdCounter(string filePath)
         {
@@ -154,6 +205,22 @@ namespace WorkNotes
                 }
             }
             return 0;
+        }
+
+        static void LaunchUrl(string url)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while launching the URL: " + ex.Message);
+            }
         }
 
     }
