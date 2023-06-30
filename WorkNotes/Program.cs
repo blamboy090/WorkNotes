@@ -8,6 +8,7 @@ namespace WorkNotes
 {
     class Program
     {
+        static int noteIdCounter = 1;
       
         static void Main(string[] args)
         {
@@ -52,8 +53,12 @@ namespace WorkNotes
                         // Read the contents of the file
                         string fileContents = File.ReadAllText(filePath);
 
+                        Console.Clear();
+
                         //Display the file contents
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("File Contents:");
+                        Console.ResetColor();
                         Console.WriteLine(fileContents);
                     }
                     else
@@ -63,7 +68,8 @@ namespace WorkNotes
                         string timeStamp = DateTime.Now.ToString("G");
 
                         // Format the entry with the timestamp and user input
-                        string entry = $"{timeStamp}: {userInput}{Environment.NewLine}";
+                        string entry = $"{noteIdCounter}: {timeStamp}: {userInput}{Environment.NewLine}";
+                        noteIdCounter++;
 
                         // Append user input to file
                         File.AppendAllText(filePath, entry);
@@ -80,6 +86,8 @@ namespace WorkNotes
             }
             //Stop the timer when the program is finished
             timer.Stop();
+
+            Console.ForegroundColor = ConsoleColor.Red;
 
             Console.WriteLine("Program finished. Press any key to exit.");
 
