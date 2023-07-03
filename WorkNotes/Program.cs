@@ -4,8 +4,6 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using System.Media;
 using System.Diagnostics;
-using static System.Formats.Asn1.AsnWriter;
-using System.ComponentModel.DataAnnotations;
 
 namespace WorkNotes
 {
@@ -13,8 +11,7 @@ namespace WorkNotes
     {
         //Specify the file path and name
         static string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WorkNotes.txt");
-        static int noteIdCounter;
-       
+               
       
         static void Main(string[] args)
         {
