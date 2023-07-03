@@ -5,6 +5,7 @@ using System.Timers;
 using System.Media;
 using System.Diagnostics;
 using static System.Formats.Asn1.AsnWriter;
+using System.ComponentModel.DataAnnotations;
 
 namespace WorkNotes
 {
@@ -19,6 +20,7 @@ namespace WorkNotes
         {
 
             int noteIdCounter = LoadNoteIdCounter(filePath) + 1;
+            string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
             string url = "https://youtu.be/BHkyhVre5V4";
 
             // Display instructions
@@ -77,10 +79,36 @@ namespace WorkNotes
                     else if (userInput.ToLower() == "loafboi")
                     {
                         Console.Clear();
-                        Console.WriteLine("FOUND ME!");                        
+                        Console.WriteLine("FOUND ME!");
                         LaunchUrl(url);
                         Console.ReadKey();
                         Console.Clear();
+                    }
+                    else if (userInput.ToLower() == "edit")
+                    {
+                        Console.WriteLine("Enter the ID of the entry to edit");
+                        string idInput = Console.ReadLine();
+                        if (int.TryParse(idInput, out int id))
+                        {
+                            EditEntryById(id);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid ID. Please enter a valid ID.");
+                        }
+                    }
+                    else if (userInput.ToLower() == "delete")
+                    {
+                        Console.WriteLine("Enter the ID of the entry to delete:");
+                        string idInput = Console.ReadLine();
+                        if (int.TryParse(idInput, out int id))
+                        {
+                            DeleteEntryById(id);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid ID. Please enter a valid ID.");
+                        }
                     }
                     else
                     {
@@ -91,6 +119,14 @@ namespace WorkNotes
                         // Format the entry with the timestamp and user input
                         string entry = $"{noteIdCounter}: {timeStamp}: {userInput}{Environment.NewLine}";
                         noteIdCounter++;
+
+                        string newDate = timeStamp.Split(' ')[0];
+                        if (newDate != currentDate)
+                        {
+                            // Add a horizontal line to separate days
+                            File.AppendAllText(filePath, $"------------------------ {newDate} ------------------------{Environment.NewLine}");
+                            currentDate = newDate;
+                        }
 
                         // Append user input to file
                         File.AppendAllText(filePath, entry);
@@ -222,6 +258,86 @@ namespace WorkNotes
                 Console.WriteLine("An error occurred while launching the URL: " + ex.Message);
             }
         }
+
+        static void EditEntryById(int id)
+        {
+            string[] lines = File.ReadAllLines(filePath);
+            bool entryFound = false;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                string[] parts = line.Split(':');
+                if (parts.Length >= 2 && int.TryParse(parts[0].Trim(), out int noteId) && noteId == id)
+                {
+                    Console.WriteLine($"Current entry with ID {id}:");
+                    Console.WriteLine(line);
+
+                    Console.WriteLine("Enter the new note:");
+                    string newNote = Console.ReadLine();
+
+                    lines[i] = $"{id}: {parts[1].Trim()}: {newNote}";
+
+                    entryFound = true;
+                    break;
+                }
+            }
+
+            if (entryFound)
+            {
+                File.WriteAllLines(filePath, lines);
+                Console.WriteLine("Entry updated successfully.");
+            }
+            else
+            {
+                Console.WriteLine($"Entry with ID {id} not found.");
+            }
+        }
+        static void DeleteEntryById(int id)
+        {
+            string[] lines = File.ReadAllLines(filePath);
+            bool entryFound = false;
+            string entryToDelete = null;
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                string[] parts = line.Split(':');
+                if (parts.Length >= 2 && int.TryParse(parts[0].Trim(), out int noteId) && noteId == id)
+                {
+                    Console.WriteLine($"Deleting entry with ID {id}:");
+                    Console.WriteLine(line);
+
+                    entryFound = true;
+                    entryToDelete = line;
+
+                    break;
+                }
+            }
+
+            if (entryFound)
+            {
+                Console.WriteLine("Are you sure you want to delete this entry? (Y/N)");
+                string confirmation = Console.ReadLine();
+                if (confirmation.ToLower() == "y")
+                {
+                    // Remove the entry from the array
+                    lines = lines.Where(line => line != entryToDelete).ToArray();
+
+                    File.WriteAllLines(filePath, lines);
+                    Console.WriteLine("Entry deleted successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("Deletion canceled.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Entry with ID {id} not found.");
+            }
+        }
+
 
     }
 }
