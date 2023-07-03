@@ -20,7 +20,9 @@ namespace WorkNotes
         {
 
             int noteIdCounter = LoadNoteIdCounter(filePath) + 1;
-            string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            
+
+
             string url = "https://youtu.be/BHkyhVre5V4";
 
             // Display instructions
@@ -120,13 +122,10 @@ namespace WorkNotes
                         string entry = $"{noteIdCounter}: {timeStamp}: {userInput}{Environment.NewLine}";
                         noteIdCounter++;
 
-                        string newDate = timeStamp.Split(' ')[0];
-                        if (newDate != currentDate)
-                        {
-                            // Add a horizontal line to separate days
-                            File.AppendAllText(filePath, $"------------------------ {newDate} ------------------------{Environment.NewLine}");
-                            currentDate = newDate;
-                        }
+                        string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+                        
+
+                       
 
                         // Append user input to file
                         File.AppendAllText(filePath, entry);
@@ -153,6 +152,8 @@ namespace WorkNotes
 
            
         }
+
+        
         static void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             // Change the console text color to yellow
