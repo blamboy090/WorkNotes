@@ -10,129 +10,23 @@ namespace WorkNotes
     class Program
     {
         //Specify the file path and name
-        static string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WorkNotes.txt");
-               
+        static string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "WorkNotes.txt");               
       
         static void Main(string[] args)
-        {
-
-            int noteIdCounter = LoadNoteIdCounter(filePath) + 1;
+        {      
+             DisplayInstructions(); 
             
-
-
-            string url = "https://youtu.be/BHkyhVre5V4";
-
-            // Display instructions
-            DisplayInstructions();
-
-            // Wait for key press to continue
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
-
-            // Clear the console
-            Console.Clear();
-
-
             // Create a timer that triggers every hour
             var timer = new System.Timers.Timer(60 * 60 * 1000); // 1 hour = 60 minutes * 60 seconds * 1000 milliseconds
-
             // Set up the event handler for the timer
             timer.Elapsed += TimerElapsed;
-
             // Start the timer
             timer.Start();
 
             try
             {
-                //run the main program loop
-                while (true) { 
-                // Get user input
-                Console.WriteLine("Enter notes or command:");
-                string userInput = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(userInput))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Error: Please add a note.");
-                        Console.ResetColor();
-                        Console.WriteLine();
-                        Console.ReadKey();
-                    }
+                HandleUserInput();
 
-                    else if (userInput.ToLower() == "exit")
-                    {
-                        break;
-                    }
-                    else if (userInput.ToLower() == "read")
-                    {
-                        // Read the contents of the file
-                        string fileContents = File.ReadAllText(filePath);
-
-                        Console.Clear();
-
-                        //Display the file contents
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("File Contents:");
-                        Console.ResetColor();
-                        Console.WriteLine(fileContents);
-                    }
-                    else if (userInput.ToLower() == "loafboi")
-                    {
-                        Console.Clear();
-                        Console.WriteLine("FOUND ME!");
-                        LaunchUrl(url);
-                        Console.ReadKey();
-                        Console.Clear();
-                    }
-                    else if (userInput.ToLower() == "edit")
-                    {
-                        Console.WriteLine("Enter the ID of the entry to edit");
-                        string idInput = Console.ReadLine();
-                        if (int.TryParse(idInput, out int id))
-                        {
-                            EditEntryById(id);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid ID. Please enter a valid ID.");
-                        }
-                    }
-                    else if (userInput.ToLower() == "delete")
-                    {
-                        Console.WriteLine("Enter the ID of the entry to delete:");
-                        string idInput = Console.ReadLine();
-                        if (int.TryParse(idInput, out int id))
-                        {
-                            DeleteEntryById(id);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid ID. Please enter a valid ID.");
-                        }
-                    }
-                    else
-                    {
-
-                        //Create a timestamp with the current date and time
-                        string timeStamp = DateTime.Now.ToString("G");
-
-                        // Format the entry with the timestamp and user input
-                        string entry = $"{noteIdCounter}: {timeStamp}: {userInput}{Environment.NewLine}";
-                        noteIdCounter++;
-
-                        string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
-                        
-
-                       
-
-                        // Append user input to file
-                        File.AppendAllText(filePath, entry);
-                        Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Text successfully written to the file.");
-                        Console.ResetColor();
-                        Console.WriteLine();
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -149,8 +43,125 @@ namespace WorkNotes
 
            
         }
+        static void HandleUserInput()
+        {
 
-        
+            int noteIdCounter = LoadNoteIdCounter(filePath) + 1;
+
+            while (true)
+            {
+                // Get user input
+                Console.WriteLine("Enter notes or command:");
+                string userInput = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(userInput))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error: Please add a note.");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.ReadKey();
+                }
+                else if (userInput.ToLower() == "exit")
+                {
+                    break;
+                }
+                else if (userInput.ToLower() == "read")
+                {
+                    ReadFile(userInput);
+                }
+                else if (userInput.ToLower() == "loafboi")
+                {
+                    LaunchLoafboi();
+                }
+                else if (userInput.ToLower() == "edit")
+                {
+                    Console.WriteLine("Enter the ID of the entry to edit");
+                    string idInput = Console.ReadLine();
+                    if (int.TryParse(idInput, out int id))
+                    {
+                        EditEntryById(id);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid ID. Please enter a valid ID.");
+                    }
+                }
+                else if (userInput.ToLower() == "delete")
+                {
+                    Console.WriteLine("Enter the ID of the entry to delete:");
+                    string idInput = Console.ReadLine();
+                    if (int.TryParse(idInput, out int id))
+                    {
+                        DeleteEntryById(id);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid ID. Please enter a valid ID.");
+                    }
+                }
+                else
+                {
+                    AddNote(userInput, ref noteIdCounter);
+                   
+                }
+            }
+
+        }
+
+        static void ReadFile(string userInput)
+        {
+            // Read the contents of the file
+            string fileContents = File.ReadAllText(filePath);
+
+            Console.Clear();
+
+            //Display the file contents
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("File Contents:");
+            Console.ResetColor();
+            Console.WriteLine(fileContents);
+        }
+
+        static void AddNote(string userInput, ref int noteIdCounter)
+        {
+            string timeStamp = DateTime.Now.ToString("G");
+            string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+            string[] lines = File.ReadAllLines(filePath);
+            string previousEntry = lines.Length > 0 ? lines[lines.Length - 1] : null;
+
+            if (previousEntry != null)
+            {
+                string[] parts = previousEntry.Split(':');
+                if (parts.Length >= 2 && DateTime.TryParse(parts[1].Trim(), out DateTime previousDate))
+                {
+                    string previousEntryDate = previousDate.ToString("yyyy-MM-dd");
+
+                    if (previousEntryDate == currentDate)
+                    {
+                        Console.WriteLine("Same day");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Different day");
+                    }
+                }
+            }
+
+            string entry = $"{noteIdCounter}: {timeStamp}: {userInput}{Environment.NewLine}";
+            noteIdCounter++;
+
+            File.AppendAllText(filePath, entry);
+
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Text successfully written to the file.");
+            Console.ResetColor();
+            Console.WriteLine();
+        }
+
+
+
         static void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             // Change the console text color to yellow
@@ -203,6 +214,11 @@ namespace WorkNotes
             Console.WriteLine("le.");
             Console.WriteLine("Use it as reference while filling out your timesheet.");
             Console.WriteLine();
+            // Wait for key press to continue
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+            // Clear the console
+            Console.Clear();
         }
 
         static void HighlightFirstInstance(string targetLetter, string text)
@@ -335,7 +351,15 @@ namespace WorkNotes
                 Console.WriteLine($"Entry with ID {id} not found.");
             }
         }
-
+        static void LaunchLoafboi()
+        {
+            string url = "https://youtu.be/BHkyhVre5V4";
+            Console.Clear();
+            Console.WriteLine("FOUND ME!");
+            LaunchUrl(url);
+            Console.ReadKey();
+            Console.Clear();
+        }
 
     }
 }
